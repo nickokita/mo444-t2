@@ -5,7 +5,7 @@ import sys
 
 def main():
     if len(sys.argv) < 4:
-        print("Usage: python main.py <data> <targetcol> <target>")
+        print("Usage: python main.py <data> <targetcol> <target> <epoch>")
         exit(1)
 
     ret = logistic_load(sys.argv[1], int(sys.argv[2]), int(sys.argv[3]))
@@ -13,17 +13,25 @@ def main():
     target = ret[1]
     print(target)
 
-    LR = LogisticRegression(features, target, 0.01, 0.5, 100)
+    if len(sys.argv) == 5:
+        _model = sys.argv[4]
+    else:
+        _model = []
+
+    LR = LogisticRegression(features, target, 0.01, 0.5, epoch=int(sys.argv[4]), model=_model)
+    if len(sys.argv) < 5:
+        LR.set_model()
+    
     LR.update_model_sgd()
 
     print(LR.get_model())
     print(LR.get_cost())
     print(LR.get_predict())
 
-    SKLR = SKLogisticRegression(features, target, 0.01, 0.5, 100)
-    SKLR.update_model_sgd()
+    #SKLR = SKLogisticRegression(features, target, 0.01, 0.5, 100)
+    #SKLR.update_model_sgd()
 
-    print(SKLR.get_predict())
+    #print(SKLR.get_predict())
     print(target)
 
 if __name__ == "__main__":

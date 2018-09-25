@@ -7,16 +7,19 @@ class LogisticRegression:
 
     # Class constructor
     def __init__(self, features, target, learning_rate, threshold=0.5,
-                 epoch=100, pctg=0.5):
+                 epoch=100, pctg=0.5, model=[]):
         self.features = features
         self.target = target
-        self.cost = sys.float_info.max
         self.learning_rate = learning_rate
-        self.model = []
+        self.model = model
         self.threshold = threshold
         self.epoch = epoch
         self.pctg = pctg
-        for i in features[0]:
+        self.cost = self.cost_function()
+
+    # Creates a new model
+    def set_model(self):
+        for i in self.features[0]:
             self.model.append(1.0)
 
     # Return computed final model
