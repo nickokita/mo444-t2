@@ -2,6 +2,7 @@ import numpy
 import csv
 import sys
 import math
+from numba import *
 
 def load_data(data_fp, _target):
     print("Loading data")
@@ -76,8 +77,8 @@ def decision_boundaries_pol(x, power):
 #   Logistic regression
 def logistic_regression(features, model, threshold):
     # Theta^t * x
-    _model = numpy.reshape(numpy.array(model), (1, len(model)))
-    _features = numpy.reshape(numpy.array(features), (1, len(features)))
+    _model = numpy.reshape(numpy.array(model, dtype="float64"), (1, len(model)))
+    _features = numpy.reshape(numpy.array(features, dtype="float64"), (1, len(features)))
 
     z = numpy.dot(_model, _features.transpose())
     try:
@@ -92,3 +93,8 @@ def logistic_regression(features, model, threshold):
         arg0 = 0
 
     return arg0
+
+@jit(nopython=True, parallel=True)
+def test(x, y):
+    return x + y
+
