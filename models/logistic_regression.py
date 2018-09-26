@@ -19,7 +19,7 @@ class LogisticRegression:
         self.threshold = threshold
         self.epoch = epoch
         self.pctg = pctg
-        self.cost = self.cost_function()
+        self.cost = self.simplified_cost_function()
         self.mini_batch_size = mini_batch_size
 
     # Creates a new model
@@ -55,7 +55,7 @@ class LogisticRegression:
             cur_target = self.target[i]
             cur_features = self.features[i]
 
-            _arg = (utils.logistic_regression(cur_features, self.model, threshold=self.threshold) - cur_target)
+            _arg = (utils.logistic_regression(cur_features, self.model) - cur_target)
             _arg = _arg ** 2
             _arg = _arg / 2
             sum += _arg
@@ -73,9 +73,15 @@ class LogisticRegression:
         for i in range(0, len(self.target)):
             cur_target = self.target[i]
             cur_features = self.features[i]
+            _lr = utils.logistic_regression(cur_features, self.model)
+            arg0 = 0
+            arg1 = 0
 
-            arg0 = cur_target * math.log(utils.logistic_regression(cur_features, self.model, threshold=self.threshold))
-            arg1 = (1 - cur_target) * math.log(1 - utils.logistic_regression(cur_features, self.model, threshold=self.threshold))
+            if (_lr != 0):
+                arg0 = cur_target * math.log(_lr)
+
+            if (_lr != 1):
+                arg1 = (1 - cur_target) * math.log(1 - _lr)
 
             sum += arg0 + arg1
 
@@ -96,7 +102,7 @@ class LogisticRegression:
             cur_target = self.target[i]
             cur_features = self.features[i]
 
-            predict = utils.logistic_regression(cur_features, self.model, threshold=self.threshold)
+            predict = utils.logistic_regression(cur_features, self.model)
 
             arg0 = predict - cur_target
             arg0 = arg0 * cur_features[j]
@@ -120,7 +126,7 @@ class LogisticRegression:
             for index, m in enumerate(self.model):
                 self.model[index] = m - self.learning_rate*self.derivative_cost_function(index, index, index+1)
 
-            cur_cost = self.cost_function()
+            cur_cost = self.simplified_cost_function()
             if (cur_cost < self.cost):
                 self.cost = cur_cost
             elif (cur_cost == self.cost):
@@ -145,7 +151,7 @@ class LogisticRegression:
             for index, m in enumerate(self.model):
                 self.model[index] = m - self.learning_rate * self.derivative_cost_function(index)
 
-            cur_cost = self.cost_function()
+            cur_cost = self.simplified_cost_function()
             if (cur_cost < self.cost):
                 self.cost = cur_cost
             elif (cur_cost == self.cost):
@@ -155,7 +161,7 @@ class LogisticRegression:
             else:
                 self.model = prev_model
 
-    # This will update the model using batch gradient descent
+    # This will update the model using mini batch gradient descent
     # It won't return anything, meaning it only changes the model within the
     # class
     def update_model_mini_batch(self):
@@ -170,7 +176,7 @@ class LogisticRegression:
             for index, m in enumerate(self.model):
                 self.model[index] = m - self.learning_rate * self.derivative_cost_function(index, index, index + self.mini_batch_size + 1)
 
-            cur_cost = self.cost_function()
+            cur_cost = self.simplified_cost_function()
             if (cur_cost < self.cost):
                 self.cost = cur_cost
             elif (cur_cost == self.cost):

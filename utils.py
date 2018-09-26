@@ -2,7 +2,6 @@ import numpy
 import csv
 import sys
 import math
-from numba import *
 
 def load_data(data_fp, _target):
     print("Loading data")
@@ -75,26 +74,32 @@ def decision_boundaries_pol(x, power):
 #   Model
 # Return:
 #   Logistic regression
-def logistic_regression(features, model, threshold):
+def logistic_regression(features, model, threshold=-1):
     # Theta^t * x
+    # _model already transposes the model array
     _model = numpy.reshape(numpy.array(model, dtype="float64"), (1, len(model)))
-    _features = numpy.reshape(numpy.array(features, dtype="float64"), (1, len(features)))
+    _features = numpy.reshape(numpy.array(features, dtype="float64"), (len(features), 1))
 
-    z = numpy.dot(_model, _features.transpose())
+    z = numpy.dot(_model, _features)
     try:
         arg0 = 1 + math.exp(-z)
         arg0 = 1 / arg0
     except OverflowError:
         arg0 = 0
 
-    if (arg0 > threshold):
-        arg0 = 1
-    else:
-        arg0 = 0
+    if (threshold != -1):
+        if (arg0 > threshold):
+            arg0 = 1
+        else:
+            arg0 = 0
 
     return arg0
 
-@jit(nopython=True, parallel=True)
-def test(x, y):
-    return x + y
+# Return the list of unique classes
+def unique_classes(target):
+    _list = []
+    for i in target:
+        if (not i in _list):
+            _list.append(i)
 
+    return _list
