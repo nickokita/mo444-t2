@@ -25,6 +25,8 @@ class SoftmaxRegression:
         if model == []:
             self.set_model()
 
+        self.sk = self.softmax_regression()
+
         self.epoch = epoch
         self.pctg = pctg
         self.cost = self.cost_function()
@@ -51,7 +53,16 @@ class SoftmaxRegression:
         return self.cost
 
     def cost_function(self):
-        return 10
+        m = len(self.features)
+        sum = 0
+
+        for index,f in enumerate(self.features):
+            cur_prob = self.sk[index]
+            for k in self.classes:
+                if self.target[index] == k:
+                    sum += numpy.log(cur_prob)
+
+        return -sum / m
 
     # Return list of predicted targets from features
     def get_predict(self):
@@ -61,20 +72,34 @@ class SoftmaxRegression:
 
         return _list
 
+    def cross_entropy(self, k):
+        m = len(self.features)
+        sum = 0
+
+        for index,f in enumerate(self.features):
+
+
     def compute_softmax_score(self, x, k):
         # _model is already the transpose of self.model
         _model = numpy.reshape(numpy.array(self.model[k], dtype="float64"), (1, len(self.model[k])))
         _features = numpy.reshape(numpy.array(self.features[x], dtype="float64"), (len(self.features[x]), 1))
 
         z = numpy.dot(_model, _features)
-        print("z[" + str(x) + "," + str(k) + "] = " + str(z))
         return z
 
 
     def softmax_regression(self):
         sk = []
-        for i in range(len(self.classes)):
-            sk.append(float(self.compute_softmax_score(0, i)))
+        for x in range(len(self.features)):
+            feat_sk = []
+            for i in range(len(self.classes)):
+                feat_sk.append(float(self.compute_softmax_score(x, i)))
+            sk.append(feat_sk)
 
-        print(self.softmax(sk))
-        return sk
+        ret = []
+        for _sk in sk:
+            ret.append(self.softmax(_sk))
+
+        self.sk = ret
+
+        return ret

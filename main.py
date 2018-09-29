@@ -17,6 +17,7 @@ def run_softmax():
                            epoch=int(sys.argv[4]), model=_model, mini_batch_size=128)
 
     print(LR.softmax_regression())
+    print(LR.get_cost())
     # LR.update_model_sgd()
     # LR.update_model_batch()
 
@@ -58,4 +59,4 @@ def main():
     print(target)
 
 if __name__ == "__main__":
-    main()
+    run_softmax()
