@@ -13,11 +13,17 @@ def run_softmax():
     else:
         _model = []
 
+
     LR = SoftmaxRegression(features, target, 0.01, classes=unique_classes(target),
                            epoch=int(sys.argv[4]), model=_model, mini_batch_size=128)
 
-    print(LR.softmax_regression())
-    print(LR.get_cost())
+    LR.softmax_regression()
+    LR.get_cost()
+    LR.update_model_sgd()
+
+    print(LR.get_predict())
+    LR.get_pctg_right()
+    #print(LR.cross_entropy(1))
     # LR.update_model_sgd()
     # LR.update_model_batch()
 
@@ -44,13 +50,14 @@ def main():
 
     LR = LogisticRegression(features, target, 0.01, epoch=int(sys.argv[4]), model=_model, mini_batch_size=128, threshold=0.5)
 
-    LR.update_model_mini_batch()
-    #LR.update_model_sgd()
+    #LR.update_model_mini_batch()
+    LR.update_model_sgd()
     #LR.update_model_batch()
 
     print(LR.get_model())
     print(LR.simplified_cost_function())
     print(LR.get_predict())
+    print(LR.get_pctg_right())
 
     #SKLR = SKLogisticRegression(features, target, 0.01, 0.5, 100)
     #SKLR.update_model_sgd()

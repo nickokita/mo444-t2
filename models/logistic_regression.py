@@ -11,6 +11,7 @@ class LogisticRegression:
         self.features = features
         self.target = target
         self.learning_rate = learning_rate
+        self.learning_rate_static = learning_rate
 
         self.model = model
         if model == []:
@@ -61,6 +62,27 @@ class LogisticRegression:
             sum += _arg
 
         return sum / m
+
+    def get_pctg_right(self):
+        tp = 0
+        fp = 0
+        tn = 0
+        fn = 0
+        for index,i in enumerate(self.get_predict()):
+            print(i)
+            print(self.target[index])
+            if (i == self.target[index] and i == 1):
+                tp += 1
+            elif (i == self.target[index] and i == 0):
+                tn += 1
+            elif (i != self.target[index] and i == 1):
+                fp += 1
+            else:
+                fn += 1
+        print("True Positive: " + str(tp))
+        print("False Positive: " + str(fp))
+        print("True Negative: " + str(tn))
+        print("False Negative: " + str(fn))
 
     # This will compute the simplified cost function for the logistic regression given a
     # model
@@ -179,9 +201,9 @@ class LogisticRegression:
             cur_cost = self.simplified_cost_function()
             if (cur_cost < self.cost):
                 self.cost = cur_cost
-            elif (cur_cost == self.cost):
-                counter += 1
-                if (counter == self.epoch * (self.pctg)):
-                    i = self.epoch + 1
+                self.learning_rate = self.learning_rate_static
             else:
                 self.model = prev_model
+                self.learning_rate -= self.learning_rate_static * 0.01
+                if (self.learning_rate <= 0):
+                    break
