@@ -56,7 +56,7 @@ class LogisticRegression:
             cur_target = self.target[i]
             cur_features = self.features[i]
 
-            _arg = (utils.logistic_regression(cur_features, self.model, threshold=self.threshold) - cur_target)
+            _arg = (utils.logistic_regression(cur_features, self.model) - cur_target)
             _arg = _arg ** 2
             _arg = _arg / 2
             sum += _arg
@@ -122,7 +122,7 @@ class LogisticRegression:
             cur_target = self.target[i]
             cur_features = self.features[i]
 
-            predict = utils.logistic_regression(cur_features, self.model, threshold=self.threshold)
+            predict = utils.logistic_regression(cur_features, self.model)
 
             arg0 = predict - cur_target
             arg0 = arg0 * cur_features[j]
