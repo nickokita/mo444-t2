@@ -93,7 +93,7 @@ class LogisticRegression:
         for i in range(0, len(self.target)):
             cur_target = self.target[i]
             cur_features = self.features[i]
-            _lr = utils.logistic_regression(cur_features, self.model, threshold=self.threshold)
+            _lr = utils.logistic_regression(cur_features, self.model)
             arg0 = 0
             arg1 = 0
 

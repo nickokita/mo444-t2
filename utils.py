@@ -45,10 +45,6 @@ def logistic_load(data_fp, _targetcol, _target):
 
     ret = [features, target]
 
-    # Normalize data - pixel max color is 255
-    for index, r in enumerate(ret[0]):
-        ret[0][index] = r/255
-
     return ret
 
 # Allows the user to select a polynomial as a model
