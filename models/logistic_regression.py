@@ -56,7 +56,7 @@ class LogisticRegression:
             cur_target = self.target[i]
             cur_features = self.features[i]
 
-            _arg = (utils.logistic_regression(cur_features, self.model) - cur_target)
+            _arg = (utils.logistic_regression(cur_features, self.model, threshold=self.threshold) - cur_target)
             _arg = _arg ** 2
             _arg = _arg / 2
             sum += _arg
@@ -69,8 +69,6 @@ class LogisticRegression:
         tn = 0
         fn = 0
         for index,i in enumerate(self.get_predict()):
-            print(i)
-            print(self.target[index])
             if (i == self.target[index] and i == 1):
                 tp += 1
             elif (i == self.target[index] and i == 0):
@@ -95,7 +93,7 @@ class LogisticRegression:
         for i in range(0, len(self.target)):
             cur_target = self.target[i]
             cur_features = self.features[i]
-            _lr = utils.logistic_regression(cur_features, self.model)
+            _lr = utils.logistic_regression(cur_features, self.model, threshold=self.threshold)
             arg0 = 0
             arg1 = 0
 
@@ -124,7 +122,7 @@ class LogisticRegression:
             cur_target = self.target[i]
             cur_features = self.features[i]
 
-            predict = utils.logistic_regression(cur_features, self.model)
+            predict = utils.logistic_regression(cur_features, self.model, threshold=self.threshold)
 
             arg0 = predict - cur_target
             arg0 = arg0 * cur_features[j]
@@ -151,12 +149,12 @@ class LogisticRegression:
             cur_cost = self.simplified_cost_function()
             if (cur_cost < self.cost):
                 self.cost = cur_cost
-            elif (cur_cost == self.cost):
-                counter += 1
-                if (counter == self.epoch*(self.pctg)):
-                    i = self.epoch + 1
+                self.learning_rate = self.learning_rate_static
             else:
                 self.model = prev_model
+                self.learning_rate -= self.learning_rate_static * 0.01
+                if (self.learning_rate <= 0):
+                    break
 
     # This will update the model using batch gradient descent
     # It won't return anything, meaning it only changes the model within the
@@ -176,12 +174,12 @@ class LogisticRegression:
             cur_cost = self.simplified_cost_function()
             if (cur_cost < self.cost):
                 self.cost = cur_cost
-            elif (cur_cost == self.cost):
-                counter += 1
-                if (counter == self.epoch * (self.pctg)):
-                    i = self.epoch + 1
+                self.learning_rate = self.learning_rate_static
             else:
                 self.model = prev_model
+                self.learning_rate -= self.learning_rate_static * 0.01
+                if (self.learning_rate <= 0):
+                    break
 
     # This will update the model using mini batch gradient descent
     # It won't return anything, meaning it only changes the model within the
