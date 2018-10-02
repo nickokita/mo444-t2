@@ -20,7 +20,8 @@ def load_data(data_fp, _target):
 
     # Normalize data - pixel max color is 255
     for index,r in enumerate(ret[0]):
-        ret[0][index] = r/255
+        ret[0][index] = r/255.0
+    print(ret[0])
 
     return ret
 
@@ -44,6 +45,9 @@ def logistic_load(data_fp, _targetcol, _target):
             target[index] = 0
 
     ret = [features, target]
+    # Normalize data - pixel max color is 255
+    #for index, r in enumerate(ret[0]):
+    #    ret[0][index] = r / 255.0
 
     return ret
 
@@ -89,6 +93,7 @@ def logistic_regression(features, model, threshold=-1):
         arg0 = 1 / arg0
     except OverflowError:
         arg0 = 0
+
 
     if (threshold != -1):
         if (arg0 > threshold):

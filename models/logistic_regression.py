@@ -94,18 +94,13 @@ class LogisticRegression:
             cur_target = self.target[i]
             cur_features = self.features[i]
             _lr = utils.logistic_regression(cur_features, self.model)
-            arg0 = 0
-            arg1 = 0
 
-            if (_lr != 0):
-                arg0 = cur_target * math.log(_lr)
-
-            if (_lr != 1):
-                arg1 = (1 - cur_target) * math.log(1 - _lr)
+            arg0 = cur_target * numpy.log(sys.float_info.epsilon + _lr)
+            arg1 = (1 - cur_target) * numpy.log(sys.float_info.epsilon + 1 - _lr)
 
             sum += arg0 + arg1
 
-        return - sum / m
+        return -sum / m
 
     # This will return the derivative of cost function for the logistic regression given a
     # model
@@ -191,7 +186,8 @@ class LogisticRegression:
 
             print("Epoch = " + str(i))
             print("Current cost = " + str(self.cost))
-            print("Current model = " + str(self.model))
+            #print("Current model = " + str(self.model))
+            self.get_pctg_right()
 
             for index, m in enumerate(self.model):
                 self.model[index] = m - self.learning_rate * self.derivative_cost_function(index, index, index + self.mini_batch_size + 1)
