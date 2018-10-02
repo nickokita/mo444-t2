@@ -17,8 +17,7 @@ def run_softmax():
     LR = SoftmaxRegression(features, target, 0.01, classes=unique_classes(target),
                            epoch=int(sys.argv[4]), model=_model, mini_batch_size=128)
 
-    LR.softmax_regression()
-    LR.get_cost()
+
     LR.update_model_sgd()
 
     print(LR.get_predict())
@@ -66,4 +65,4 @@ def main():
     print(target)
 
 if __name__ == "__main__":
-    main()
+    run_softmax()

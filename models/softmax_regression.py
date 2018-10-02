@@ -2,6 +2,7 @@ import numpy
 import sys
 import math
 import utils
+from random import random
 
 class SoftmaxRegression:
 
@@ -42,7 +43,7 @@ class SoftmaxRegression:
         for i in range(len(self.classes)):
             _class_param = []
             for i in self.features[0]:
-                _class_param.append(1)
+                _class_param.append(random())
             self.model.append(_class_param)
 
     def get_pctg_right(self):
@@ -58,10 +59,10 @@ class SoftmaxRegression:
                     max = jk
                     index = jj
             if (self.target[ii] == index):
-                print(str(ii) + ": Right")
+                #print(str(ii) + ": Right")
                 right += 1
             else:
-                print(str(ii) + ": Wrong")
+                #print(str(ii) + ": Wrong")
                 wrong += 1
 
         print("Right: " + str(right))
@@ -84,7 +85,7 @@ class SoftmaxRegression:
             cur_prob = self.sk[index]
             for k in self.classes:
                 if self.target[index] == k:
-                    sum += numpy.log(cur_prob[int(k)])
+                    sum += numpy.log(sys.float_info.epsilon + cur_prob[int(k)])
 
         return -sum / m
 
@@ -99,6 +100,8 @@ class SoftmaxRegression:
     def cross_entropy(self, k):
         m = len(self.features)
         sum = [0] * len(self.features[0])
+
+        print(self.features)
 
         for index,f in enumerate(self.features):
             if (self.target[index] == k):
