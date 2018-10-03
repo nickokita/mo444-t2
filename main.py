@@ -29,6 +29,10 @@ def run_softmax():
     #print(LR.get_predict())
 
 def run_logistic():
+    if (len(sys.argv) < 7):
+        print("Usage: python3 main.py <data> <target_col> <numofclasses> <epoch> <validation_data> <test_data>")
+        return
+
     models = []
     for i in range(0,int(sys.argv[3])-1):
         print("Running class " + str(i))
@@ -50,10 +54,19 @@ def run_logistic():
         print(LR.get_predict())
         LR.get_pctg_right()
 
-    data = load_data(sys.argv[1], int(sys.argv[2]))
-    features = decision_boundaries_pol(ret[0], 1)
+    data = load_data(sys.argv[5], int(sys.argv[2]))
+    features = decision_boundaries_pol(data[0], 1)
     print("\n\n\n\n\n\n")
     print("Running validation")
+    print("Predictions:")
+    print(logistic_validation(models, features, data[1]))
+    print("Target:")
+    print(data[1])
+
+    data = load_data(sys.argv[6], int(sys.argv[2]))
+    features = decision_boundaries_pol(data[0], 1)
+    print("\n\n\n\n\n\n")
+    print("Running Test")
     print("Predictions:")
     print(logistic_validation(models, features, data[1]))
     print("Target:")
