@@ -124,6 +124,7 @@ class LogisticRegression:
 
             sum += arg0
 
+        print(batch_final-batch_init)
         return sum / (batch_final-batch_init)
 
     # This will update the model using stochastic gradient descent

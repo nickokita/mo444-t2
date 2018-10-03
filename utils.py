@@ -3,6 +3,31 @@ import csv
 import sys
 import math
 
+def logistic_validation(models, data, target):
+    predicts = []
+    for d in data:
+        max = (0, 0)
+        for index,m in enumerate(models):
+            score = logistic_regression(d,m)
+            if score > max[1]:
+                max = (index, m)
+
+        predicts.append(max[0])
+
+    right = 0
+    wrong = 0
+    for index,t in enumerate(target):
+        if (predicts[index] == t):
+            right += 1
+        else:
+            wrong += 1
+
+    print("Right: " + str(right))
+    print("Wrong: " + str(wrong))
+
+    return predicts
+
+
 def load_data(data_fp, _target):
     print("Loading data")
 

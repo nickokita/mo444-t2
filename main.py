@@ -13,7 +13,6 @@ def run_softmax():
     else:
         _model = []
 
-
     LR = SoftmaxRegression(features, target, 0.01, classes=unique_classes(target),
                            epoch=int(sys.argv[4]), model=_model, mini_batch_size=128)
 
@@ -28,6 +27,33 @@ def run_softmax():
     #print(LR.get_model())
     #print(LR.get_cost())
     #print(LR.get_predict())
+
+def run_logistic():
+    models = []
+    for i in range(0,int(sys.argv[3])-1):
+        print("Running class " + str(i))
+        ret = logistic_load(sys.argv[1], int(sys.argv[2]), i)
+        features = decision_boundaries_pol(ret[0], 2)
+        target = ret[1]
+        _model = []
+
+        LR = LogisticRegression(features, target, 0.01, epoch=int(sys.argv[4]), model=_model, mini_batch_size=128,
+                                threshold=0.2)
+
+        #LR.update_model_mini_batch()
+        #LR.update_model_sgd()
+        LR.update_model_batch()
+
+        models.append(LR.get_model())
+        print(LR.get_model())
+        print(LR.simplified_cost_function())
+        print(LR.get_predict())
+        print(LR.get_pctg_right())
+
+    data = load_data(sys.argv[1], int(sys.argv[2]))
+    print("Running validation")
+    print(logistic_validation(models, data[0], data[1]))
+
 
 def main():
     if len(sys.argv) < 4:
@@ -64,4 +90,4 @@ def main():
     print(target)
 
 if __name__ == "__main__":
-    run_softmax()
+    run_logistic()
