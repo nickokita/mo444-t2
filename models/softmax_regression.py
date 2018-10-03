@@ -35,7 +35,7 @@ class SoftmaxRegression:
         self.mini_batch_size = mini_batch_size
 
     def softmax(self, prob):
-        e_x = numpy.exp(prob)
+        e_x = numpy.exp(prob - numpy.max(prob))
         e_x = e_x / e_x.sum(axis=0)
         return e_x
 
@@ -43,7 +43,7 @@ class SoftmaxRegression:
         for i in range(len(self.classes)):
             _class_param = []
             for i in self.features[0]:
-                _class_param.append(random())
+                _class_param.append(1)
             self.model.append(_class_param)
 
     def get_pctg_right(self):
@@ -92,16 +92,13 @@ class SoftmaxRegression:
     # Return list of predicted targets from features
     def get_predict(self):
         _list = []
-        for i in self.features:
-            _list.append(self.softmax_regression())
+        _list.append(self.softmax_regression())
 
         return _list
 
     def cross_entropy(self, k):
         m = len(self.features)
         sum = [0] * len(self.features[0])
-
-        print(self.features)
 
         for index,f in enumerate(self.features):
             if (self.target[index] == k):
@@ -151,7 +148,6 @@ class SoftmaxRegression:
             for index,m in enumerate(self.model):
                 self.softmax_regression()
                 _ce = self.cross_entropy(index)
-
                 self.model[index] = m - self.learning_rate * _ce
 
             self.cost = self.cost_function()

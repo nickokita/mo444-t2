@@ -17,7 +17,6 @@ def run_softmax():
     LR = SoftmaxRegression(features, target, 0.01, classes=unique_classes(target),
                            epoch=int(sys.argv[4]), model=_model, mini_batch_size=128)
 
-
     LR.update_model_sgd()
 
     print(LR.get_predict())
