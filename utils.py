@@ -10,7 +10,7 @@ def logistic_validation(models, data, target):
         for index,m in enumerate(models):
             score = logistic_regression(d,m)
             if score > max[1]:
-                max = (index, m)
+                max = (index, score)
 
         predicts.append(max[0])
 

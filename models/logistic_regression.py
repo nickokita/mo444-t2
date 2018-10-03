@@ -124,7 +124,6 @@ class LogisticRegression:
 
             sum += arg0
 
-        print(batch_final-batch_init)
         return sum / (batch_final-batch_init)
 
     # This will update the model using stochastic gradient descent
@@ -185,10 +184,11 @@ class LogisticRegression:
         for i in range(0, self.epoch):
             prev_model = self.model
 
-            print("Epoch = " + str(i))
-            print("Current cost = " + str(self.cost))
-            #print("Current model = " + str(self.model))
-            self.get_pctg_right()
+            if (i % 100 == 0):
+                print("Epoch = " + str(i))
+                print("Current cost = " + str(self.cost))
+                #print("Current model = " + str(self.model))
+                self.get_pctg_right()
 
             for index, m in enumerate(self.model):
                 self.model[index] = m - self.learning_rate * self.derivative_cost_function(index, index, index + self.mini_batch_size + 1)
