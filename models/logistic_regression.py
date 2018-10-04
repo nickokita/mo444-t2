@@ -184,14 +184,15 @@ class LogisticRegression:
         for i in range(0, self.epoch):
             prev_model = self.model
 
-            if (i % 100 == 0):
+            if (i % 100 == 0 or i == self.epoch):
                 print("Epoch = " + str(i))
                 print("Current cost = " + str(self.cost))
                 #print("Current model = " + str(self.model))
                 self.get_pctg_right()
 
-            for index, m in enumerate(self.model):
-                self.model[index] = m - self.learning_rate * self.derivative_cost_function(index, index, index + self.mini_batch_size + 1)
+            for j in range(0, len(self.features), self.mini_batch_size):
+                for index, m in enumerate(self.model):
+                    self.model[index] = m - self.learning_rate * self.derivative_cost_function(index, j, j + self.mini_batch_size)
 
             cur_cost = self.simplified_cost_function()
             if (cur_cost < self.cost):

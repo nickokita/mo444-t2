@@ -49,9 +49,9 @@ def run_logistic():
         #LR.update_model_batch()
 
         models.append(LR.get_model())
-        print(LR.get_model())
-        print(LR.simplified_cost_function())
-        print(LR.get_predict())
+        #print(LR.get_model())
+        #print(LR.simplified_cost_function())
+        #print(LR.get_predict())
         LR.get_pctg_right()
 
     data = load_data(sys.argv[5], int(sys.argv[2]))

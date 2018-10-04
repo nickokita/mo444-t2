@@ -44,8 +44,8 @@ def load_data(data_fp, _target):
     ret = [features, target]
 
     # Normalize data - pixel max color is 255
-    #for index,r in enumerate(ret[0]):
-    #    ret[0][index] = r/255
+    for index,r in enumerate(ret[0]):
+        ret[0][index] = r/255
 
     return ret
 
