@@ -1,6 +1,6 @@
 from utils import *
 from models.logistic_regression import LogisticRegression
-from models.softmax_regression import SoftmaxRegression
+from models.new_softmax_regression import SoftmaxRegression
 import sys
 
 def run_softmax():
@@ -16,17 +16,12 @@ def run_softmax():
     LR = SoftmaxRegression(features, target, 0.01, classes=unique_classes(target),
                            epoch=int(sys.argv[4]), model=_model, mini_batch_size=128)
 
+    print(LR.model)
     LR.update_model_sgd()
-
-    print(LR.get_predict())
-    LR.get_pctg_right()
-    #print(LR.cross_entropy(1))
-    # LR.update_model_sgd()
-    # LR.update_model_batch()
-
-    #print(LR.get_model())
-    #print(LR.get_cost())
-    #print(LR.get_predict())
+    print(LR.model)
+    LR.softmax()
+    print(LR.to_classlabel())
+    print(LR.get_pctg_right())
 
 def run_logistic():
     if (len(sys.argv) < 7):
@@ -34,7 +29,7 @@ def run_logistic():
         return
 
     models = []
-    for i in range(0,int(sys.argv[3])-1):
+    for i in range(0,int(sys.argv[3])):
         print("Running class " + str(i))
         ret = logistic_load(sys.argv[1], int(sys.argv[2]), i)
         features = decision_boundaries_pol(ret[0], 1)
@@ -74,4 +69,4 @@ def run_logistic():
 
 
 if __name__ == "__main__":
-    run_logistic()
+    run_softmax()
