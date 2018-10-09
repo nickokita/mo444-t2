@@ -10,6 +10,7 @@ class LogisticRegression:
                  epoch=100, pctg=0.2, model=[], mini_batch_size=0):
         self.features = features
         self.target = target
+        self.target_one_hot = (numpy.arange(numpy.max(target) + 1) == target[:, None]).astype(float)
         self.learning_rate = learning_rate
         self.learning_rate_static = learning_rate
 
@@ -22,6 +23,31 @@ class LogisticRegression:
         self.pctg = pctg
         self.cost = self.simplified_cost_function()
         self.mini_batch_size = mini_batch_size
+
+    def normalized_accuracy(self):
+        e = 0.2
+        tp = 0
+        tn = 0
+        fp = 0
+        fn = 0
+
+        _predict = self.get_predict()
+        for i in range(0, len(self.target_one_hot)):
+            for j in range(0, len(self.target_one_hot[i])):
+                diff = label[i][j] - _predict[i][j]
+                if (label[i][j] == 1):
+                    if (diff <= e):
+                        tp = tp + 1
+                    else:
+                        fn = fn + 1
+                else:
+                    if (diff <= e - 1):
+                        fp = fp + 1
+                    else:
+                        tn = tn + 1
+
+        return (((tp/(tp+fn))+(tn/(tn+fp)))/len(self.classes))
+
 
     # Creates a new model
     def set_model(self):
@@ -138,8 +164,9 @@ class LogisticRegression:
             print("Current cost = " + str(self.cost))
             print("Current model = " + str(self.model))
 
-            for index, m in enumerate(self.model):
-                self.model[index] = m - self.learning_rate*self.derivative_cost_function(index, index, index+1)
+            for j in range(len(self.features)):
+                for index, m in enumerate(self.model):
+                    self.model[index] = m - self.learning_rate*self.derivative_cost_function(index, j, j+1)
 
             cur_cost = self.simplified_cost_function()
             if (cur_cost < self.cost):

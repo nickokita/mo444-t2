@@ -4,28 +4,57 @@ import sys
 import math
 
 def logistic_validation(models, data, target):
+    e = 0.2
+    tp = 0
+    fp = 0
+    tn = 0
+    fn = 0
     predicts = []
     for d in data:
-        max = (0, 0)
+        sk = []
         for index,m in enumerate(models):
             score = logistic_regression(d,m)
-            if score > max[1]:
-                max = (index, score)
+            sk.append(score)
+        predicts.append(sk)
 
-        predicts.append(max[0])
+    target_one_hot = (numpy.arange(numpy.max(target) + 1) == target[:, None]).astype(float)
+    for i in range(0, len(target_one_hot)):
+        for j in range(0, len(target_one_hot[i])):
+            diff = target_one_hot[i][j] - predicts[i][j]
+            if (target_one_hot[i][j] == 1):
+                if (diff <= e):
+                    tp = tp + 1
+                else:
+                    fn = fn + 1
+            else:
+                if (diff <= e - 1):
+                    fp = fp + 1
+                else:
+                    tn = tn + 1
 
-    right = 0
-    wrong = 0
-    for index,t in enumerate(target):
-        if (predicts[index] == t):
-            right += 1
-        else:
-            wrong += 1
+    return (((tp/(tp+fn))+(tn/(tn+fp)))/len(models))
 
-    print("Right: " + str(right))
-    print("Wrong: " + str(wrong))
+    #for d in data:
+    #    max = (0, 0)
+    #    for index,m in enumerate(models):
+    #        score = logistic_regression(d,m)
+    #        if score > max[1]:
+    #            max = (index, score)
 
-    return predicts
+    #    predicts.append(max[0])
+
+    #right = 0
+    #wrong = 0
+    #for index,t in enumerate(target):
+    #    if (predicts[index] == t):
+    #        right += 1
+    #    else:
+    #        wrong += 1
+
+    #print("Right: " + str(right))
+    #print("Wrong: " + str(wrong))
+
+    #return predicts
 
 
 def load_data(data_fp, _target):

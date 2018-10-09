@@ -53,7 +53,7 @@ def run_logistic():
     features = decision_boundaries_pol(data[0], 1)
     print("\n\n\n\n\n\n")
     print("Running validation")
-    print("Predictions:")
+    print("Pctg right:")
     print(logistic_validation(models, features, data[1]))
     print("Target:")
     print(data[1])
@@ -62,11 +62,12 @@ def run_logistic():
     features = decision_boundaries_pol(data[0], 1)
     print("\n\n\n\n\n\n")
     print("Running Test")
-    print("Predictions:")
+    print("Pctg right:")
     print(logistic_validation(models, features, data[1]))
     print("Target:")
     print(data[1])
 
 
 if __name__ == "__main__":
-    run_softmax()
+    run_logistic()
+#    run_softmax()
